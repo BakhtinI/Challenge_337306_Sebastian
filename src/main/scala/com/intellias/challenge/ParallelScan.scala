@@ -43,7 +43,6 @@ object ParallelScan extends ScanInterface {
       Tree.Leaf(from, until, maxForRange = sequentialUpsweep(input, from, until))
     } else {
       val middleOfTheRange = from + rangeLength / 2
-//      println(s"middleOfTheRange $middleOfTheRange, from $from, until $until, threshold $threshold")
       Tree(
         parallel(
           taskA = upsweep(input, from, middleOfTheRange, threshold),
@@ -63,17 +62,11 @@ object ParallelScan extends ScanInterface {
     @tailrec
     def downsweepRangeRec(currentIndex: Int, currentMax: Int): Unit = {
       if (currentIndex != until) {
-//        println(
-//          s"for index $currentIndex compare initialMaxValue $currentMax with input(currentIndex) ${input(currentIndex)}"
-//        )
         val maxOnCurrentPosition = Math.max(currentMax, input(currentIndex))
         output(currentIndex) = maxOnCurrentPosition
         downsweepRangeRec(currentIndex + 1, maxOnCurrentPosition)
       }
     }
-//    println(
-//      s"calling sequentialDownsweep from $from until $until with initialMaxValue $initialMaxValue"
-//    )
     downsweepRangeRec(from, initialMaxValue)
   }
 
@@ -85,16 +78,11 @@ object ParallelScan extends ScanInterface {
   ): Unit = {
     tree match {
       case Tree.Node(left, right) =>
-//        println(s"left $left initialMaxValue $initialMaxValue")
-//        println(
-//          s"right $right Math.max(left.maxForRange, initialMaxValue) ${Math.max(left.maxForRange, initialMaxValue)}"
-//        )
         parallel(
           taskA = downsweep(input, output, initialMaxValue, left),
           taskB = downsweep(input, output, Math.max(left.maxForRange, initialMaxValue), right)
         )
       case Tree.Leaf(from, until, maxForRange) =>
-//        println(s"Initial max value: $initialMaxValue, max for range: $maxForRange")
         sequentialDownsweep(input, output, initialMaxValue, from, until)
     }
   }
