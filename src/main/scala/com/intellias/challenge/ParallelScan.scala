@@ -78,6 +78,12 @@ object ParallelScan extends ScanInterface {
   ): Unit = {
     tree match {
       case Tree.Node(left, right) =>
+        // TODO optimisation idea:
+        //  if left.maxForRange <= initialMaxValue
+        //     no need for recursive downsweep - we can fulfill whole range with initialMaxValue
+        //  if right <= Math.max(left.maxForRange, initialMaxValue)
+        //   no need for recursive downsweep - we can fulfill whole range with
+        //   Math.max(left.maxForRange, initialMaxValue)
         parallel(
           taskA = downsweep(input, output, initialMaxValue, left),
           taskB = downsweep(input, output, Math.max(left.maxForRange, initialMaxValue), right)
