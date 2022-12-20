@@ -39,8 +39,6 @@ class ParallelScanSpec extends UnitSpec with ScalaCheckPropertyChecks {
   it should "produce the same results like SequentialScan for generated input arrays of ints" in {
 
     forAll(genIntArrayOfDifferentSizes, minSuccessful(50_000)) { (provided: Array[Int]) =>
-      // uncomment below print if you want to see what input arrays are generated
-      // println(s"Provided array: ${provided.mkString("Array(", ", ", ")")}")
       val sequentialScanOutput = new Array[Int](provided.length)
       SequentialScan.scan(provided, sequentialScanOutput)
 
@@ -54,8 +52,6 @@ class ParallelScanSpec extends UnitSpec with ScalaCheckPropertyChecks {
 
   it should "produce the same results like SequentialScan for generated big input arrays of ints" in {
     forAll(genBigIntArrays, minSuccessful(100), workers(10)) { (provided: Array[Int]) =>
-      // uncomment below print if you want to see what input arrays are generated
-      // println(s"Provided array: ${provided.mkString("Array(", ", ", ")")}")
       val sequentialScanOutput = new Array[Int](provided.length)
       SequentialScan.scan(provided, sequentialScanOutput)
 
