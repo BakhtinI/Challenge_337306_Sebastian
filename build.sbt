@@ -1,5 +1,7 @@
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
+//TODO update to 3.3.x when available as 3.2.x don't have compiler options to fail on unused/dead code
+//  reference: https://github.com/lampepfl/dotty/pull/16157
 ThisBuild / scalaVersion := "3.2.1"
 
 val PerformanceTest = config("performance") extend Test
@@ -11,10 +13,7 @@ lazy val performanceTestSettings =
       PerformanceTest / parallelExecution := false,
       PerformanceTest / scalaSource       := baseDirectory.value / "src/performance/scala",
       PerformanceTest / logBuffered       := false,
-      PerformanceTest / testOptions := Seq(
-//        Tests.Filter((_: String).startsWith("com.intellias.challenge.performance.")),
-        Tests.Argument("-oD")
-      )
+      PerformanceTest / testOptions       := Seq(Tests.Argument("-oD"))
     )
 
 lazy val root = (project in file("."))
